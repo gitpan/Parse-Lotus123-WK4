@@ -20,7 +20,7 @@ Description of WK4 format:
 L<http://www.mettalogic.uklinux.net/tim/l123/l123r4.html>
 
 Method for decoding IEEE 80-bit floats:
-L<http://www.perlmonks.org/?node_id=587419>
+L<http://www.perlmonks.org/?node=586923>
 
 =head1 BUGS
 
@@ -49,7 +49,7 @@ use strict;
 
 BEGIN {
 
-    $Parse::Lotus123::WK4::VERSION = '0.082';
+    $Parse::Lotus123::WK4::VERSION = '0.088';
 
 # test for float endianness using little-endian 33 33 3b f3, which is a float code for 1.4
     
@@ -65,31 +65,34 @@ BEGIN {
 }
 
 sub decode_lotus_weirdness {
-    my $h = $_[0];
-    return $h / 2 if !( $h & 1 );
-    my $ld = $h >> 4;
+    my $h = unpack 's', pack 'S', $_[0];
+    return $h / 2 unless $h & 1;
     my $sw = $h & 0x0f;
-    return $ld * 5000  if $sw == 0x1;
-    return $ld * 500   if $sw == 0x3;
-    return $ld / 20    if $sw == 0x5;
-    return $ld / 200   if $sw == 0x7;
-    return $ld / 2000  if $sw == 0x9;
-    return $ld / 20000 if $sw == 0xb;
-    return $ld / 16    if $sw == 0xd;
-    return $ld / 64    if $sw == 0xf;
+    {
+        use integer; # this makes the right-shift operator signed for the block
+        $h >>= 4;
+    }
+    return $h * 5000  if $sw == 0x1;
+    return $h * 500   if $sw == 0x3;
+    return $h / 20    if $sw == 0x5;
+    return $h / 200   if $sw == 0x7;
+    return $h / 2000  if $sw == 0x9;
+    return $h / 20000 if $sw == 0xb;
+    return $h / 16    if $sw == 0xd;
+    return $h / 64    if $sw == 0xf;
 }
 
 sub decode_float80 {
-    my ( $discard, $mantissa, $hidden, $exponent, $sign ) =
-      unpack 'a11 a52 a1 a15 a1', $_[0];
+    my( $discard, $mantissa, $hidden, $exponent, $sign ) =
+        unpack 'a11 a52 a1 a15 a1', $_[ 0 ];
     $exponent = unpack( 'v', pack 'b15', $exponent ) - 16383 + 1023;
-    $exponent = 32767, $mantissa = '0' x 52
-      if $exponent < 0 || $exponent > 2047;
+    ($exponent, $mantissa) = (32767, '0' x 52)
+        if $exponent < 0 || $exponent > 2047;
     $exponent = unpack 'b11', pack 'v', $exponent;
-     my $bits64 = $mantissa . $exponent . $sign;
-    $bits64 = pack 'a'x8, reverse unpack 'a' x 8, pack 'b64', $bits64
+    my $bits64 = pack 'b64', $mantissa . $exponent . $sign;
+    $bits64 = pack 'a' x 8, reverse unpack 'a' x 8, pack 'b64', $bits64
       if $Parse::Lotus::WK4::bigEndian;
-    return unpack 'd', $bits64;
+    unpack 'd', $bits64;
 }
 
 sub parse($) {
@@ -100,8 +103,7 @@ sub parse($) {
         my $read = read ($fh, my $byt, $len);
         if ( $read != $len ) {
             # warn "Could not read $len bytes";
-            # no need to warn the user:
-            # we are probably just at the end of the file and got the structure wrong
+            # no need to warn the user: we are probably just at the end of the file
         }
         elsif ( $code == 0x16 ) {
             my ( $row, $sheet, $col, $align, $text ) = unpack( 'vCCCA*', $byt );

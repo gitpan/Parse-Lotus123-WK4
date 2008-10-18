@@ -6,8 +6,9 @@ Parse::Lotus123::WK4 - extract data from Lotus 1-2-3 .WK4 files
 
 =over 8
 
-=item 0.082 (18 October 2008)
+=item 0.088 (18 October 2008)
 
+Major bug fixes in the handling of floating point numbers.
 Bug fixes in wk42csv.
 Some presentational improvements.
 
