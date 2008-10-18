@@ -20,7 +20,7 @@ Plenty, almost certainly.
 
 =head1 AUTHOR
 
-Written by Franck Latremoliere. Copyright (c) 2007, 2008 Reckon LLP.
+Written by Franck Latremoliere. Copyright (c) 2008 Reckon LLP.
 L<http://www.reckon.co.uk/staff/franck/>
 
 =head1 NO WARRANTY
@@ -66,6 +66,10 @@ for my $file (@ARGV) {
     open WK4, '<', $file;
     my $data = Parse::Lotus123::WK4::parse(*WK4);
     close WK4;
+    if (!$data) {
+        warn "$file not understood";
+        next;
+    }
     ( my $name = $file ) =~ s/(\.wk4)?$/.csv/i;
     my $no = '';
     $name =~ s/-?$no\.csv$/'-' . ++$no . '.csv'/e while -e $name;
@@ -74,10 +78,14 @@ for my $file (@ARGV) {
     if ($longFormat) {
         print CSV qq%"sheet","row","column","data"\n%;
         for ( my $sheet = 0 ; $sheet < @$data ; $sheet++ ) {
+            next unless defined $data->[$sheet];
             for ( my $row = 0 ; $row < @{ $data->[$sheet] } ; $row++ ) {
+                next unless defined $data->[$sheet][$row];
                 for ( my $col = 0 ; $col < @{ $data->[$sheet][$row] } ; $col++ )
                 {
                     local $_ = $data->[$sheet][$row][$col];
+                    next unless defined $_;
+                    s/"/""/g;
                     print CSV qq%"$sheet","$row","$col","%
                       . ( defined $_ ? qq%"$_"% : '' ) . qq%"\n%;
                 }
@@ -86,10 +94,15 @@ for my $file (@ARGV) {
     }
     else {
         for ( my $sheet = 0 ; $sheet < @$data ; $sheet++ ) {
+            next unless defined $data->[$sheet];
             for ( my $row = 0 ; $row < @{ $data->[$sheet] } ; $row++ ) {
+                next unless defined $data->[$sheet][$row];
                 for ( my $col = 0 ; $col < @{ $data->[$sheet][$row] } ; $col++ )
                 {
-                    print CSV qq%"$data->[$sheet][$row][$col]",%;
+                    local $_ = $data->[$sheet][$row][$col];
+                    next unless defined $_;
+                    s/"/""/g;
+                    print CSV qq%"$_",%;
                 }
                 print CSV qq%""\n%;
             }

@@ -1,10 +1,15 @@
 =head1 NAME
 
-Parse::Lotus123::WK4 - CPAN release history
+Parse::Lotus123::WK4 - extract data from Lotus 1-2-3 .WK4 files
 
 =head1 RELEASE HISTORY
 
 =over 8
+
+=item 0.081 (18 October 2008)
+
+Bug fixes in wk42csv.
+Some presentational improvements.
 
 =item 0.08 (14 September 2008)
 

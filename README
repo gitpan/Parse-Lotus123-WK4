@@ -1,0 +1,3 @@
+Parse::Lotus123::WK4 is a module to extract data from Lotus 1-2-3 .WK4 files.
+
+The distribution also contains the command-line tool wk42csv.
