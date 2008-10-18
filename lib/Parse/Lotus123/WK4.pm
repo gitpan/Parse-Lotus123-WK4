@@ -49,7 +49,7 @@ use strict;
 
 BEGIN {
 
-    $Parse::Lotus123::WK4::VERSION = '0.081';
+    $Parse::Lotus123::WK4::VERSION = '0.082';
 
 # test for float endianness using little-endian 33 33 3b f3, which is a float code for 1.4
     

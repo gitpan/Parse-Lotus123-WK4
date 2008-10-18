@@ -76,7 +76,7 @@ for my $file (@ARGV) {
     open CSV, '>', $name;
 
     if ($longFormat) {
-        print CSV qq%"sheet","row","column","data"\n%;
+        print CSV qq%sheet,row,column,data\n%;
         for ( my $sheet = 0 ; $sheet < @$data ; $sheet++ ) {
             next unless defined $data->[$sheet];
             for ( my $row = 0 ; $row < @{ $data->[$sheet] } ; $row++ ) {
@@ -86,8 +86,7 @@ for my $file (@ARGV) {
                     local $_ = $data->[$sheet][$row][$col];
                     next unless defined $_;
                     s/"/""/g;
-                    print CSV qq%"$sheet","$row","$col","%
-                      . ( defined $_ ? qq%"$_"% : '' ) . qq%"\n%;
+                    print CSV qq%$sheet,$row,$col,"$_"\n%;
                 }
             }
         }
@@ -100,11 +99,11 @@ for my $file (@ARGV) {
                 for ( my $col = 0 ; $col < @{ $data->[$sheet][$row] } ; $col++ )
                 {
                     local $_ = $data->[$sheet][$row][$col];
-                    next unless defined $_;
+                    $_ = '' unless defined $_;
                     s/"/""/g;
                     print CSV qq%"$_",%;
                 }
-                print CSV qq%""\n%;
+                print CSV qq%\n%;
             }
         }
     }
