@@ -8,11 +8,12 @@ Parse::Lotus123::WK4 - extract data from Lotus 1-2-3 .wk4 files
 
 This module extracts data from Lotus 1-2-3 .wk4 files.
 
-=head1 SYNOPSIS
+=head1 NO DOCUMENTATION
 
 Procedural API:
 Parse::Lotus123::WK4::parse takes a filehandle and returns a three-dimensional arrayref.
-See the source code to wk42csv for more information.
+
+See the source code to wk42csv for a working example.
 
 =head1 SOURCES
 
@@ -24,7 +25,7 @@ L<http://www.perlmonks.org/?node=586923>
 
 =head1 BUGS
 
-This code is experimental, not properly tested and not suitable for production use.
+This code is experimental, not documented and not properly tested.
 
 =head1 NO WARRANTY
 
@@ -32,14 +33,12 @@ This code comes with ABSOLUTELY NO WARRANTY of any kind.
 
 =head1 AUTHOR
 
-Written by Franck Latremoliere.
-Copyright (c) 2008 Reckon LLP.
+Copyright 2008 Reckon LLP and Franck Latrémolière.
 L<http://www.reckon.co.uk/staff/franck/>
 
 =head1 LICENCE
 
-This program is free software; you can use, redistribute and/or modify it under the same terms as Perl itself
-(Artistic Licence or GNU GPL).
+This is free software; you can redistribute it and/or modify it under the same terms as Perl.
 
 =cut
 
@@ -49,7 +48,7 @@ use strict;
 
 BEGIN {
 
-    $Parse::Lotus123::WK4::VERSION = '0.088';
+    $Parse::Lotus123::WK4::VERSION = '0.09';
 
 # test for float endianness using little-endian 33 33 3b f3, which is a float code for 1.4
     

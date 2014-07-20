@@ -1,7 +1,7 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
 eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
-  if 0;    # not running under some shell
+  if 0;    # to go to perl if running under some shell
 
 =head1 NAME
 
@@ -18,16 +18,20 @@ lines in the WK4 without reference to which sheet they came from.
 
 Plenty, almost certainly.
 
-=head1 AUTHOR
-
-Written by Franck Latremoliere. Copyright (c) 2008 Reckon LLP.
-L<http://www.reckon.co.uk/staff/franck/>
-
 =head1 NO WARRANTY
 
 This code comes with ABSOLUTELY NO WARRANTY of any kind.
 
+=head1 AUTHOR
+
+Copyright 2007, 2008, 2014 Reckon LLP and Franck Latrémolière.
+L<http://www.reckon.co.uk/staff/franck/>
+
 =head1 LICENCE
+
+This is free software; you can redistribute it and/or modify it under the same terms as Perl.
+
+=cut
 
 This program is free software; you can use, redistribute and/or modify it under the same terms as Perl itself
 (Artistic Licence or GNU GPL).
@@ -41,7 +45,6 @@ use Parse::Lotus123::WK4;
 unless (@ARGV) {
     print STDERR "wk42csv: no input files\n";
     print STDERR "Usage: wk42csv [-v] file.dta [otherfile.dta ...]\n";
-    print STDERR "Copyright (c) 2008 Reckon LLP";
     print STDERR " (Parse::Lotus123::WK4 version $Parse::Lotus123::WK4::VERSION)\n";
     exit 1;
 }
